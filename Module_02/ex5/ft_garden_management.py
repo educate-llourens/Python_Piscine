@@ -27,8 +27,8 @@ class WaterError(GardenError):
         if self.water_level is None:
             msg = "Not enough water in tank"
         elif self.water_level < 1:
-            msg: str = (f"Water level {water_level} is too "
-                        + "low (min 1)")
+            msg = (f"Water level {water_level} is too "
+                   "low (min 1)")
         elif self.water_level > 10:
             msg = (f"Water level {water_level} is too "
                    + "high (max 10)")
@@ -52,10 +52,10 @@ class SunError(GardenError):
         self.sun_hours = sun_hours
         if sun_hours < 2:
             msg: str = f"Sunlight hours {sun_hours} is too "
-            + "low (min 2)"
+            "low (min 2)"
         else:
             msg = f"Sunlight hours {sun_hours} is too "
-            + "high (max 12)"
+            "high (max 12)"
         super().__init__(msg)
 
 

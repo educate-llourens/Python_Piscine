@@ -32,7 +32,7 @@ def test_watering_system() -> None:
     print("\nTesting normal watering...")
     plants_list: list[str] = ["tomato", "lettuce", "carrots"]
     water_plants(plants_list)
-    plants_list = ["tomato", None, "carrots"]
+    plants_list = ["tomato", "", "carrots"]
     print("\nTesting with error...")
     water_plants(plants_list)
     print("\nCleanup always happens, even with errors!")

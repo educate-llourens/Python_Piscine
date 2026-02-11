@@ -48,7 +48,7 @@ def test_plant_checks() -> None:
 
     print("\nTesting empty plant name...")
     try:
-        check_plant_health(None, 3, 4)
+        check_plant_health("", 3, 4)
     except ValueError as error_msg:
         print(error_msg)
 
