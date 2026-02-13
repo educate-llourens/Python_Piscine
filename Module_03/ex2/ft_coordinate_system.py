@@ -26,12 +26,20 @@ def find_distance(end_position: tuple) -> float:
     return distance
 
 
+def invalid_args() -> None:
+    sys.argv[1] = "abc"
+    sys.argv[2] = "def"
+    sys.argv[3] = "ghi"
+
+    parse_args(sys.argv[1:])
+
+
 def valid_coordinates(coordinates: tuple) -> None:
     print('Parsing coordinates: "3,4,0"')
     print(f"Parsed position: {coordinates}")
 
 
-def parse_args() -> tuple:
+def parse_args(args: list) -> tuple:
     coordinates: list = []
     str_list: list[str] = []
 
@@ -48,7 +56,7 @@ def parse_args() -> tuple:
     for item in str_list:
         try:
             int(item)
-            coordinates.append(item)
+            coordinates.append(int(item))
         except ValueError as msg:
             print(f"\033[31mError parsing coordinates: {msg}")
             print(f"Error details - Type: {type(msg).__name__}, "
@@ -59,9 +67,17 @@ def parse_args() -> tuple:
 def main() -> None:
     coordinates: tuple = ()
     print("=== Game Coordinate System ===\n")
-    coordinates = parse_args()
-    print_distance = 3,4,0
-
+    coordinates = parse_args(sys.argv[1:])
+    print(f"Position created {coordinates}")
+    print(f"Distance between (0, 0, 0) and {coordinates}: "
+          f"{find_distance(coordinates):.2f}")
+    print("")
+    print('Parsing coordinates: "3,4,0"')
+    print(f"Parsed position: {coordinates}")
+    print(f"Distance between (0, 0, 0) and (3, 4, 0): "
+          f"{find_distance(coordinates)}")
+    print("")
+    invalid_args()    
 
 if __name__ == "__main__":
     main()
