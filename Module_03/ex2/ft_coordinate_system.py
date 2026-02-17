@@ -86,15 +86,9 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
         tuple[int, int, int]: Returns a tuple with the int
         coordinate
     """
-    str_list: list[str] = []
     coordinates: list[int] = []
 
-    if (len_str(args) == 2):
-        str_list = args[0].split(",")
-    else:
-        for arg in args:
-            str_list = append_str(str_list, arg)
-    for item in str_list:
+    for item in args:
         try:
             int(item)
             coordinates = append_int(coordinates, int(item))
@@ -108,19 +102,22 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
 
 def print_len_error() -> None:
     print("\033[31mError: Not enough arguments. "
-          "Please enter a coordinate")
+          'Please enter a coordinate. Usage: 3 2 1 or "3,2,1"')
     print('Template coordinate: "10,20,5"\033[0m\n')
 
 
 def main() -> None:
     arg_len: int = len_str(sys.argv[1:])
-    if arg_len <= 1:
+    parse_list: list[str] = []
+    if arg_len <= 0:
         print_len_error()
         parse_list = ["10", "20", "5"]
-    elif arg_len == 2:
+    elif arg_len == 1:
         parse_list = sys.argv[1].split(",")
-    else:
+    elif arg_len == 3:
         parse_list: list[str] = sys.argv[1:]
+    else:
+        print('Too many arguments. Usage: 3 2 1 or "3,2,1')
     coordinates: tuple[int, ...] = parse_args(parse_list)
 
     print("=== Game Coordinate System ===\n")

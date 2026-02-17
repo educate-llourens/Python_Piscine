@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-if __name__ == "__main__":
+def main() -> None:
     print("=== Achievement Tracker System ===\n")
     alice: set[str] = set(['first_kill', 'level_10', 'treasure_hunter',
                            'speed_demon'])
@@ -26,6 +26,11 @@ if __name__ == "__main__":
     print("")
     print(f"Common to all players: {common_achievements}")
     print(f"Rare achievements (1 player): {rare_achievements}")
+    print("")
     print(f"Alice vs Bob common: {alice.intersection(bob)}")
     print(f"Alice unique: {alice.difference(bob)}")
     print(f"Bob unique: {bob.difference(alice)}")
+
+
+if __name__ == "__main__":
+    main()
