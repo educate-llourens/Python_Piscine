@@ -4,25 +4,25 @@ import sys
 
 
 def check_input() -> list[int]:
-    scores_list: list = []
+    int_list: list[int] = []
     score_int: int = 0
 
     for score in sys.argv[1:]:
         try:
             score_int = int(score)
-            scores_list.append(score_int)
+            int_list.append(score_int)
         except ValueError:
             print(f"\033[31mError: {score} is not a number\033[0m\n")
             continue
-    return scores_list
+    return int_list
 
 
-if __name__ == "__main__":
+def main() -> None:
     if len(sys.argv) > 1:
         try:
             player_scores: list[int] = check_input()
-        except:
-            sys.exit()
+        except ValueError:
+            return
         total_players: int = len(player_scores)
         total_score: int = sum(player_scores)
         average_score: float = total_score / total_players
@@ -44,3 +44,6 @@ if __name__ == "__main__":
         print("No scores provided. Usage: python3 ft_score_analytics.py "
               "<score1> <score2> ...")
 
+
+if __name__ == "__main__":
+    main()
