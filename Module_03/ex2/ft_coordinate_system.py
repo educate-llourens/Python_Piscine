@@ -3,19 +3,48 @@
 import math
 import sys
 
+
 def len_str(list: list[str]) -> int:
     length: int = 0
-    
+
     for item in list:
         length += 1
     return length
 
+
 def len_nbrs(list: list[int]) -> int:
     length: int = 0
-    
+
     for item in list:
         length += 1
     return length
+
+
+def append_int(nbr_list: list[int], nbr: int) -> list[int]:
+    new_list: list[int] = []
+
+    if not nbr_list:
+        new_list += [nbr]
+        return new_list
+
+    for item in nbr_list:
+        new_list += [item]
+    new_list += [nbr]
+    return new_list
+
+
+def append_str(str_list: list[str], string: str) -> list[str]:
+    new_list: list[str] = []
+
+    if not str_list:
+        new_list += [string]
+        return new_list
+
+    for item in str_list:
+        new_list += [item]
+    new_list += [string]
+    return new_list
+
 
 def find_distance(end_position: tuple[int, ...]) -> float:
     """Finds the distance between the start position and the end position.
@@ -32,8 +61,12 @@ def find_distance(end_position: tuple[int, ...]) -> float:
     end_y: int
     end_z: int
 
-    end_x, end_y, end_z = end_position
-    distance = math.sqrt((end_x - 0)**2 + (end_y - 0)**2 + (end_z - 0)**2)
+    try:
+        end_x, end_y, end_z = end_position
+        distance = math.sqrt((end_x - 0)**2 + (end_y - 0)**2 + (end_z - 0)**2)
+    except ValueError as msg:
+        print(f"\033[31mError: {msg}\033[0m\n")
+        distance = 0
     return distance
 
 
@@ -60,11 +93,11 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
         str_list = args[0].split(",")
     else:
         for arg in args:
-            str_list.append(arg)
+            str_list = append_str(str_list, arg)
     for item in str_list:
         try:
             int(item)
-            coordinates.append(int(item))
+            coordinates = append_int(coordinates, int(item))
         except ValueError as msg:
             print(f"\033[31mError parsing coordinates: {msg}")
             print(f"Error details - Type: {type(msg).__name__}, "
@@ -75,17 +108,21 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
 
 def print_len_error() -> None:
     print("\033[31mError: Not enough arguments. "
-            "Please enter a coordinate")
+          "Please enter a coordinate")
     print('Template coordinate: "10,20,5"\033[0m\n')
 
 
 def main() -> None:
-    if len_str(sys.argv[1:]) <= 1:
+    arg_len: int = len_str(sys.argv[1:])
+    if arg_len <= 1:
         print_len_error()
         parse_list = ["10", "20", "5"]
-    parse_list: list[str] = sys.argv[1:]
+    elif arg_len == 2:
+        parse_list = sys.argv[1].split(",")
+    else:
+        parse_list: list[str] = sys.argv[1:]
     coordinates: tuple[int, ...] = parse_args(parse_list)
-    parse_valid_args: list[str] = ["3", "4", "0"]
+
     print("=== Game Coordinate System ===\n")
     print(f"Position created {coordinates}")
     print(f"Distance between (0, 0, 0) and {coordinates}: "
@@ -93,12 +130,32 @@ def main() -> None:
     print("")
 
     print('Parsing coordinates: "3,4,0"')
+    parse_valid_args: list[str] = ["3", "4", "0"]
+
     coordinates = parse_args(parse_valid_args)
     print(f"Parsed position: {coordinates}")
     print(f"Distance between (0, 0, 0) and (3, 4, 0): "
           f"{find_distance(coordinates):.2f}")
     print("")
 
+    print('Parsing invalid coordinates: "abc,def,ghi"')
+    parse_invalid_args: list[str] = ["abc", "def", "ghi"]
+
+    parse_args(parse_invalid_args)
+    print("")
+
+    print("Unpacking demonstration:")
+    print("Player at x=3, y=4, z=0")
+    unpacked_coordinates: tuple[int, ...] = (3, 4, 0)
+    end_x: int
+    end_y: int
+    end_z: int
+    
+    end_x = unpacked_coordinates[0]
+    end_y = unpacked_coordinates[1]
+    end_z = unpacked_coordinates[2]
+    
+    print(f"Coordinates: X={end_x}, Y={end_y}, Z={end_z}")
 
 if __name__ == "__main__":
     main()
