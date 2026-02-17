@@ -150,12 +150,13 @@ def main() -> None:
     end_x: int
     end_y: int
     end_z: int
-    
+
     end_x = unpacked_coordinates[0]
     end_y = unpacked_coordinates[1]
     end_z = unpacked_coordinates[2]
-    
+
     print(f"Coordinates: X={end_x}, Y={end_y}, Z={end_z}")
+
 
 if __name__ == "__main__":
     main()
