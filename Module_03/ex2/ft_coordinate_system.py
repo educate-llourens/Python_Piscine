@@ -5,6 +5,14 @@ import sys
 
 
 def len_str(list: list[str]) -> int:
+    """Finds the length of a list of strings
+
+    Args:
+        list (list[str]): The list we need to find the length of
+
+    Returns:
+        int: Returns the length of the list
+    """
     length: int = 0
 
     for item in list:
@@ -13,6 +21,14 @@ def len_str(list: list[str]) -> int:
 
 
 def len_nbrs(list: list[int]) -> int:
+    """Finds the length of a string of ints
+
+    Args:
+        list (list[int]): The list we need to find the length of
+
+    Returns:
+        int: Returns the length of the list
+    """
     length: int = 0
 
     for item in list:
@@ -21,6 +37,15 @@ def len_nbrs(list: list[int]) -> int:
 
 
 def append_int(nbr_list: list[int], nbr: int) -> list[int]:
+    """Appends the number to the list of numbers
+
+    Args:
+        nbr_list (list[int]): The list we need to append to
+        nbr (int): The number we need to append
+
+    Returns:
+        list[int]: The updated list of numbers
+    """
     new_list: list[int] = []
 
     if not nbr_list:
@@ -34,6 +59,15 @@ def append_int(nbr_list: list[int], nbr: int) -> list[int]:
 
 
 def append_str(str_list: list[str], string: str) -> list[str]:
+    """Appends a string to a list of strings
+
+    Args:
+        str_list (list[str]): The list we need to append to
+        string (str): The string we need to append
+
+    Returns:
+        list[str]: Returns an updated list of strings
+    """
     new_list: list[str] = []
 
     if not str_list:
@@ -71,6 +105,8 @@ def find_distance(end_position: tuple[int, ...]) -> float:
 
 
 def valid_coordinates() -> None:
+    """Pretty stupid function printing the coordinates we are working with
+    """
     print('Parsing coordinates: "3,4,0"')
     print('Parsed position: "3,4,0"')
 
@@ -101,12 +137,16 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
 
 
 def print_len_error() -> None:
+    """Prints the error messages if there are not enough arguments
+    """
     print("\033[31mError: Not enough arguments. "
           'Please enter a coordinate. Usage: 3 2 1 or "3,2,1"')
     print('Template coordinate: "10,20,5"\033[0m\n')
 
 
 def main() -> None:
+    """The main function for the program
+    """
     arg_len: int = len_str(sys.argv[1:])
     parse_list: list[str] = []
     if arg_len <= 0:

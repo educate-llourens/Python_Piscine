@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 def main() -> None:
+    """The main function for the program that does the calculations and
+    prints the things
+    """
     print("=== Achievement Tracker System ===\n")
     alice: set[str] = set(['first_kill', 'level_10', 'treasure_hunter',
                            'speed_demon'])

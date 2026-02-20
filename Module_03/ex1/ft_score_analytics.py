@@ -4,6 +4,12 @@ import sys
 
 
 def check_input() -> list[int]:
+    """Checks the input from the terminal to ensure they are
+    valid ints"
+
+    Returns:
+        list[int]: Returns a list of scores to calculate stats on
+    """
     int_list: list[int] = []
     score_int: int = 0
 
