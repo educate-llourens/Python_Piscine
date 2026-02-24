@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 def main() -> None:
+    """Demosntrates understanding of how to write to a file
+    """
     print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===\n")
     print("Initializing new storage unit: new_discovery.txt")
     try:

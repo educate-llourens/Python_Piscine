@@ -4,6 +4,8 @@ import sys
 
 
 def main() -> None:
+    """Demonstrates understanding of stdin, stdout and stderr
+    """
     archivist_id: str = ""
     status_report: str = ""
 

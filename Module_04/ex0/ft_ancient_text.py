@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 def main() -> None:
+    """Demonstrates understanding of how to read from a file
+    """
     content: str = ""
 
     print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
