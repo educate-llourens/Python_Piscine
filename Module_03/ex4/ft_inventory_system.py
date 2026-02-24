@@ -1,5 +1,23 @@
 #!/usr/bin/env python3
 
+import sys
+
+
+def find_rarest_items(dictionary: dict) -> dict:
+    players: dict
+    alice: dict
+    alice_items: dict
+    catalogue: dict
+
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice_items = alice.get("items", {})
+    catalogue = dictionary.get("catalogue", {})
+    
+    for items in alice_items:
+    
+
+
 def append_str(str_list: list[str], string: str) -> list[str]:
     """Appends a string to a list of strings
 
@@ -73,9 +91,43 @@ def find_inventory_total(inventory: dict) -> int:
 
 
 def get_inventory(dictionary: dict) -> dict:
-    players: list[dict, {}] = dictionary.get("players", {})
+    players: dict = dictionary.get("players", {})
     alice = players.get("alice", {})
     return alice
+
+
+def update_item_count(alice: dict) -> None:
+    new_item_count: int = 0
+    alice_items: dict
+
+    alice_items = alice.get("items", {})
+    for qty in alice_items.values():
+        new_item_count += qty
+    alice.update({"item_count": new_item_count})
+
+
+def update_dictionary(dictionary: dict) -> dict:
+    updated_items: dict = {"items": {}}
+    split_list: list[str] = []
+    name: str = ""
+    qty: int = 0
+    players: dict
+    alice: dict
+
+    for item in sys.argv[1:]:
+        split_list = item.split(":")
+        name = split_list[0]
+        try:
+            qty = int(split_list[1])
+            updated_items["items"][name] = qty
+        except ValueError:
+            print("Error: Could not convert argv value to int")
+            continue
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice["items"] = updated_items["items"]
+    update_item_count(alice)
+    return dictionary
 
 
 def create_dictionary() -> dict:
@@ -144,12 +196,18 @@ def create_dictionary() -> dict:
 
 
 def main() -> None:
-    dictionary: dict = create_dictionary()
-    inventory: dict = get_inventory(dictionary)
-    catalogue: dict = dictionary.get("catalogue", {})
+    dictionary: dict
+    inventory: dict
+    catalogue: dict
     inventory_total: int = 0
     most_abundant: tuple[str, int]
     least_abundant: tuple[str, int]
+    rarest_items: dict
+
+    dictionary = create_dictionary()
+    if len(sys.argv[1:]) >= 2:
+        dictionary = update_dictionary(dictionary)
+    inventory = get_inventory(dictionary)
 
     print("=== Inventory System Analysis ===")
     inventory_total = find_inventory_total(inventory)
@@ -173,11 +231,13 @@ def main() -> None:
     print("")
 
     print("=== Item Categories ===")
+    rarest_items = find_rarest_items(dictionary)
     print("")
 
     print("=== Management Suggestions ===")
     restock_items: list[str] = find_restock(inventory)
     print(f"Restock needed: {restock_items}")
+
 
 if __name__ == "__main__":
     main()
