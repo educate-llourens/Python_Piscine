@@ -24,6 +24,8 @@ def check_input() -> list[int]:
 
 
 def main() -> None:
+    """The main function to demonstrated understanding of lists
+    """
     if len(sys.argv) > 1:
         try:
             player_scores: list[int] = check_input()

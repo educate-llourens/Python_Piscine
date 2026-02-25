@@ -104,13 +104,6 @@ def find_distance(end_position: tuple[int, ...]) -> float:
     return distance
 
 
-def valid_coordinates() -> None:
-    """Pretty stupid function printing the coordinates we are working with
-    """
-    print('Parsing coordinates: "3,4,0"')
-    print('Parsed position: "3,4,0"')
-
-
 def parse_args(args: list[str]) -> tuple[int, ...]:
     """Parses the command line arguments and either throws an error
     or places the coordinate into a tuple of type int
@@ -130,8 +123,8 @@ def parse_args(args: list[str]) -> tuple[int, ...]:
             coordinates = append_int(coordinates, int(item))
         except ValueError as msg:
             print(f"\033[31mError parsing coordinates: {msg}")
-            print(f"Error details - Type: {type(msg).__name__}, "
-                  f'Args: ("{msg}",)\033[0m')
+            print("Error details - Type: ValueError, "
+                  f'Args: ("{msg.args}",)\033[0m')
             return (10, 20, 5)
     return tuple(coordinates)
 
@@ -155,7 +148,7 @@ def main() -> None:
     elif arg_len == 1:
         parse_list = sys.argv[1].split(",")
     elif arg_len == 3:
-        parse_list: list[str] = sys.argv[1:]
+        parse_list = sys.argv[1:]
     else:
         print('Too many arguments. Usage: 3 2 1 or "3,2,1')
     coordinates: tuple[int, ...] = parse_args(parse_list)
@@ -188,9 +181,7 @@ def main() -> None:
     end_y: int
     end_z: int
 
-    end_x = unpacked_coordinates[0]
-    end_y = unpacked_coordinates[1]
-    end_z = unpacked_coordinates[2]
+    end_x, end_y, end_z = unpacked_coordinates
 
     print(f"Coordinates: X={end_x}, Y={end_y}, Z={end_z}")
 

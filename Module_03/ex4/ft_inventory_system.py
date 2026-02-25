@@ -186,12 +186,18 @@ def update_dictionary(dictionary: dict) -> dict:
 
     for item in sys.argv[1:]:
         split_list = item.split(":")
+        if len(split_list) != 2:
+            print(f"Error: Invalid usage: '{item}'. Expected 'name:qty")
+            return dictionary
         name = split_list[0]
         try:
             qty = int(split_list[1])
             updated_items["items"][name] = qty
         except ValueError:
             print("Error: Could not convert argv value to int")
+            continue
+        except IndexError as msg:
+            print(f"Error: {msg}")
             continue
     players = dictionary.get("players", {})
     alice = players.get("alice", {})
@@ -274,6 +280,10 @@ def main() -> None:
     rarest_items: dict = {}
     common_items: dict = {}
 
+    if len(sys.argv[1:]) < 1:
+        print("Error: Not enough argumants. Usage: ./program_name "
+              "item:value item:value")
+        return
     dictionary = create_dictionary()
     if len(sys.argv[1:]) >= 2:
         dictionary = update_dictionary(dictionary)
