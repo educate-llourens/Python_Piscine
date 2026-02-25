@@ -3,19 +3,89 @@
 import sys
 
 
-def find_rarest_items(dictionary: dict) -> dict:
-    players: dict
-    alice: dict
-    alice_items: dict
-    catalogue: dict
+def find_item(dictionary: dict) -> bool:
+    players: dict = {}
+    alice: dict = {}
+    alice_items: dict = {}
+
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice_items = alice.get("items", {})
+    if alice_items.get("sword") is not None:
+        return True
+    return False
+
+
+def get_values(dictionary: dict) -> list[int]:
+    players: dict = {}
+    alice: dict = {}
+    alice_items: dict = {}
+    values: list[int] = []
+
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice_items = alice.get("items", {})
+    for value in alice_items.values():
+        values.append(value)
+    return values
+
+
+def get_keys(dictionary: dict) -> list[str]:
+    players: dict = {}
+    alice: dict = {}
+    alice_items: dict = {}
+    keys: list[str] = []
+
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice_items = alice.get("items", {})
+    for key in alice_items.keys():
+        keys.append(key)
+    return keys
+
+
+def find_common_items(dictionary: dict) -> dict:
+    players: dict = {}
+    alice: dict = {}
+    alice_items: dict = {}
+    catalogue: dict = {}
+    common_items: dict = {}
+    item_reference: dict = {}
+    item_rarity: str = ""
 
     players = dictionary.get("players", {})
     alice = players.get("alice", {})
     alice_items = alice.get("items", {})
     catalogue = dictionary.get("catalogue", {})
-    
-    for items in alice_items:
-    
+
+    for item_name, qty in alice_items.items():
+        item_reference = catalogue.get(item_name, {})
+        item_rarity = item_reference.get("rarity", "")
+        if item_rarity == "common":
+            common_items.update({item_name: qty})
+    return common_items
+
+
+def find_rarest_items(dictionary: dict) -> dict:
+    players: dict = {}
+    alice: dict = {}
+    alice_items: dict = {}
+    catalogue: dict = {}
+    rare_items: dict = {}
+    item_reference: dict = {}
+    item_rarity: str = ""
+
+    players = dictionary.get("players", {})
+    alice = players.get("alice", {})
+    alice_items = alice.get("items", {})
+    catalogue = dictionary.get("catalogue", {})
+
+    for item_name, qty in alice_items.items():
+        item_reference = catalogue.get(item_name, {})
+        item_rarity = item_reference.get("rarity", "")
+        if item_rarity == "legendary" or item_rarity == "rare":
+            rare_items.update({item_name: qty})
+    return rare_items
 
 
 def append_str(str_list: list[str], string: str) -> list[str]:
@@ -98,7 +168,7 @@ def get_inventory(dictionary: dict) -> dict:
 
 def update_item_count(alice: dict) -> None:
     new_item_count: int = 0
-    alice_items: dict
+    alice_items: dict = {}
 
     alice_items = alice.get("items", {})
     for qty in alice_items.values():
@@ -165,17 +235,17 @@ def create_dictionary() -> dict:
             }
         },
         "catalogue": {
-            "pixel_sword": {
+            "sword": {
                 'type': 'weapon',
                 'value': 150,
                 'rarity': 'common'
             },
-            'quantum_ring': {
+            'armor': {
                 'type': 'accessory',
                 'value': 500,
                 'rarity': 'rare'
             },
-            'health_byte': {
+            'potion': {
                 'type': 'consumable',
                 'value': 25,
                 'rarity': 'common'
@@ -185,7 +255,7 @@ def create_dictionary() -> dict:
                 'value': 1000,
                 'rarity': 'legendary'
             },
-            'code_bow': {
+            'bow': {
                 'type': 'weapon',
                 'value': 200,
                 'rarity': 'uncommon'
@@ -196,13 +266,13 @@ def create_dictionary() -> dict:
 
 
 def main() -> None:
-    dictionary: dict
-    inventory: dict
-    catalogue: dict
+    dictionary: dict = {}
+    inventory: dict = {}
     inventory_total: int = 0
     most_abundant: tuple[str, int]
     least_abundant: tuple[str, int]
-    rarest_items: dict
+    rarest_items: dict = {}
+    common_items: dict = {}
 
     dictionary = create_dictionary()
     if len(sys.argv[1:]) >= 2:
@@ -232,11 +302,26 @@ def main() -> None:
 
     print("=== Item Categories ===")
     rarest_items = find_rarest_items(dictionary)
+    common_items = find_common_items(dictionary)
+    print(f"Rare: {rarest_items}")
+    print(f"Common: {common_items}")
     print("")
 
     print("=== Management Suggestions ===")
     restock_items: list[str] = find_restock(inventory)
     print(f"Restock needed: {restock_items}")
+    print("")
+
+    print("=== Dictionary Properties Demo ===")
+    keys: list[str] = get_keys(dictionary)
+    values: list[int] = get_values(dictionary)
+    print("Dictionary keys:", end="")
+    for key in keys:
+        print(f" {key}", end=",")
+    print("\nDictionary values:", end="")
+    for value in values:
+        print(f" {value}", end=",")
+    print(f"\nSample lookup - 'sword' in inventory: {find_item(dictionary)}")
 
 
 if __name__ == "__main__":
