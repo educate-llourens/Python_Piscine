@@ -16,7 +16,8 @@ def is_prime_nbr(nbr: int) -> bool:
     return True
 
 
-def prime_nbr_generator(start: int, iterations: int) -> Generator[int, None, None]:
+def prime_nbr_generator(start: int,
+                        iterations: int) -> Generator[int, None, None]:
     nbr: int = start + 1
     found_prime: int = 0
 
