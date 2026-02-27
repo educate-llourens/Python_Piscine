@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def garden_operations(operation_type: str) -> Exception:
+def garden_operations(operation_type: str) -> None:
     """
     Summary:
         Creates the different types of exceptions that can occur
@@ -22,7 +22,7 @@ def garden_operations(operation_type: str) -> Exception:
         int('abc')
         7 / 0
         open("missing.txt", "r")
-        plants: dict = {"tomato": 32}
+        plants = {"tomato": 32}
         plants["mising_plant"]
 
 

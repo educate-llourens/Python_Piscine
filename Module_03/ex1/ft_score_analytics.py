@@ -4,29 +4,54 @@ import sys
 
 
 def check_input() -> list[int]:
-    scores_list: list = []
+    """Checks the input from the terminal to ensure they are
+    valid ints"
+
+    Returns:
+        list[int]: Returns a list of scores to calculate stats on
+    """
+    int_list: list[int] = []
+    score_int: int = 0
 
     for score in sys.argv[1:]:
         try:
-            int(score)
+            score_int = int(score)
+            int_list.append(score_int)
         except ValueError:
-            print(f"Error: {score} is not a number")
+            print(f"\033[31mError: {score} is not a number\033[0m\n")
             continue
-        scores_list.append(score)
-    return scores_list
+    return int_list
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """The main function to demonstrated understanding of lists
+    """
     if len(sys.argv) > 1:
-        player_scores: list[int] = check_input()
+        try:
+            player_scores: list[int] = check_input()
+        except ValueError:
+            return
         total_players: int = len(player_scores)
         total_score: int = sum(player_scores)
-        try:
-            average_score: float = total_score / total_players
-        except ZeroDivisionError:
-            pass
+        average_score: float = total_score / total_players
         high_score: int = max(player_scores)
         lowest_score: int = min(player_scores)
         range: int = high_score - lowest_score
-    print("No scores provided. Usage: python3 ft_score_analytics.py "
-          "<score1> <score2> ...")
+
+        print("=== Player Score Analytics ===")
+        print(f"Scores processed: {player_scores}")
+        print(f"Total players: {total_players}")
+        print(f"Total score: {total_score}")
+        print(f"Average score: {average_score}")
+        print(f"High score: {high_score}")
+        print(f"Low score: {lowest_score}")
+        print(f"Score range: {range}")
+
+    else:
+        print("=== Player Score Analytics ===")
+        print("No scores provided. Usage: python3 ft_score_analytics.py "
+              "<score1> <score2> ...")
+
+
+if __name__ == "__main__":
+    main()
