@@ -67,7 +67,7 @@ def main() -> None:
     nbr_high_lvl_players: int = 0
     nbr_treasure_events: int = 0
     nbr_lvl_up: int = 0
-    fib_sequence = 0
+    fib_sequence: Generator[int, None, None]
 
     print("=== Game Data Stream Processor ===\n")
     print("Processing 1000 game events...\n")
