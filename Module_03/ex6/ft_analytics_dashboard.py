@@ -260,11 +260,13 @@ def create_dictionary() -> dict:
         ],
         "game_modes": ["casual", "competitive", "ranked"],
         "achievements": [
+            "pixel_perfect",
             "first_blood",
             "level_master",
             "speed_runner",
             "treasure_seeker",
             "boss_hunter",
+            "first_blood",
             "pixel_perfect",
             "combo_king",
             "explorer",
@@ -277,13 +279,106 @@ def analytics_dashboard() -> None:
     dictionary: dict = create_dictionary()
     print("=== Game Analytics Dashboard ===\n")
     print("=== List Comprehension Examples ===")
-    sessions: list[dict] = dictionary["sessions"]
+    print_high_scores(dictionary)
+    print_scores_doubled(dictionary)
+    print_active_players(dictionary)
+    print("\n=== Dict Comprehension Examples ===")
+    print_player_scores(dictionary)
+    print_score_categories(dictionary)
+    print_achievement_counts(dictionary)
+    print("\n=== Set Comprehension Examples ===")
+    print_unique_players(dictionary)
+    print_unique_achievements(dictionary)
+    print_game_modes(dictionary)
+
+
+def print_high_scores(dictionary: dict) -> None:
+    players: dict = dictionary["players"]
     high_scorers: list[str] = [
-        player["player"]
-        for player in sessions
-        if player["score"] > 2000
+        player_name  # key that it fetches the value
+        for player_name in players
+        if players[player_name]["total_score"] > 2000
     ]
-    print(f"High scorers (>2000): {high_scorers}")
+    print(f"High scorers (>2000): {sorted(high_scorers)}")
+
+
+def print_scores_doubled(dictionary: dict) -> None:
+    sessions: list[dict] = dictionary["sessions"]
+    sessions_doubled: list[int] = [
+        unique_session["score"] * 2
+        for unique_session in sessions[:4]
+    ]
+    print(f"Scores doubled: {sessions_doubled}")
+
+
+def print_active_players(dictionary: dict) -> None:
+    sessions: list[dict] = dictionary["sessions"]
+    players: dict = dictionary["players"]
+    active_players: list[str] = [
+        unique_player
+        for unique_player in players
+        if unique_player in {
+            unique_session["player"]
+            for unique_session in sessions
+        }
+    ]
+    print(f"Active players: {sorted(active_players)}")
+
+
+def print_player_scores(dictionary: dict) -> None:
+    players = dictionary["players"]
+    player_scores: dict = {
+        unique_player: players[unique_player]["total_score"]
+        for unique_player in players
+    }
+    print(f"Player scores: {player_scores}")
+
+
+def print_score_categories(dictionary: dict) -> None:
+    players = dictionary["players"]
+    score_list: list[int] = [
+        players[unique_player]["total_score"]
+        for unique_player in players
+    ]
+
+    session_categories: dict = {
+        "high": sum(1 for unique_score in score_list
+                    if unique_score >= 8000),
+        "medium": sum(1 for unique_score in score_list
+                      if unique_score >= 2000 and unique_score < 8000),
+        "low": sum(1 for unique_score in score_list
+                   if unique_score < 2000),
+    }
+    print(f"Score categories: {session_categories}")
+
+
+def print_achievement_counts(dictionary: dict) -> None:
+    players = dictionary["players"]
+    achievements_dict: dict = {
+        unique_player: players[unique_player]["achievements_count"]
+        for unique_player in players
+    }
+    print(f"Achievement counts: {achievements_dict}")
+
+
+def print_unique_players(dictionary: dict) -> None:
+    sessions = dictionary["sessions"]
+    unique_players_set: set[str] = {
+        unique_session["player"]
+        for unique_session in sessions
+    }
+    print(f"Unique players: {sorted(unique_players_set)}")
+
+
+def print_unique_achievements(dictionary: dict) -> None:
+    unique_achievements: set[str] = {
+        unique_achievement
+        for unique_achievement in dictionary["achievements"]
+    }
+    print(f"Unique achievements: {sorted(unique_achievements)}")
+
+
+def print_game_modes(dictionary: dict) -> None:
 
 
 if __name__ == "__main__":
