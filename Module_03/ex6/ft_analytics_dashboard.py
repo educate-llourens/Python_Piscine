@@ -290,12 +290,14 @@ def analytics_dashboard() -> None:
     print_unique_players(dictionary)
     print_unique_achievements(dictionary)
     print_game_modes(dictionary)
+    print("\n=== Combined Analysis ===")
+    print_total_players(dictionary)
 
 
 def print_high_scores(dictionary: dict) -> None:
     players: dict = dictionary["players"]
     high_scorers: list[str] = [
-        player_name  # key that it fetches the value
+        player_name
         for player_name in players
         if players[player_name]["total_score"] > 2000
     ]
@@ -362,7 +364,7 @@ def print_achievement_counts(dictionary: dict) -> None:
 
 
 def print_unique_players(dictionary: dict) -> None:
-    sessions = dictionary["sessions"]
+    sessions: list[dict] = dictionary["sessions"]
     unique_players_set: set[str] = {
         unique_session["player"]
         for unique_session in sessions
@@ -379,6 +381,21 @@ def print_unique_achievements(dictionary: dict) -> None:
 
 
 def print_game_modes(dictionary: dict) -> None:
+    sessions: list[dict] = dictionary["sessions"]
+    game_modes: set[str] = {
+        game_mode["mode"]
+        for game_mode in sessions
+    }
+    print(f"Game modes: {sorted(game_modes)}")
+
+
+def print_total_players(dictionary: dict) -> None:
+    sessions: list[dict] = dictionary["sessions"]
+    unique_players_set: set[str] = {
+        unique_session["player"]
+        for unique_session in sessions
+    }
+    print(f"Total players: {len(unique_players_set)}")
 
 
 if __name__ == "__main__":
