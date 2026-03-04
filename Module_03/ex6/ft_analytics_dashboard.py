@@ -426,11 +426,13 @@ def print_top_performer(dictionary: dict) -> None:
         for unique_player in players
     ]
     max_score: int = max(scores)
-    max_scorer: dict
+    max_scorer: str = ""
     for unique_player in players:
-        if unique_player == max_score:
+        if players[unique_player]["total_score"] == max_score:
             max_scorer = unique_player
-    print(f"Top performer: {max_scorer} ({max_scorer["total_score"]})")
+    max_achievements = dictionary["players"][max_scorer]["achievements_count"]
+    print(f"Top performer: {max_scorer} ({max_score} points,"
+          f" {max_achievements} achievements)")
 
 
 if __name__ == "__main__":
