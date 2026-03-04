@@ -292,6 +292,9 @@ def analytics_dashboard() -> None:
     print_game_modes(dictionary)
     print("\n=== Combined Analysis ===")
     print_total_players(dictionary)
+    print_total_unique_achievments(dictionary)
+    print_average_score(dictionary)
+    print_top_performer(dictionary)
 
 
 def print_high_scores(dictionary: dict) -> None:
@@ -396,6 +399,38 @@ def print_total_players(dictionary: dict) -> None:
         for unique_session in sessions
     }
     print(f"Total players: {len(unique_players_set)}")
+
+
+def print_total_unique_achievments(dictionary: dict) -> None:
+    unique_achievements: set[str] = {
+        unique_achievement
+        for unique_achievement in dictionary["achievements"]
+    }
+    print(f"Total unique achievements: {len(unique_achievements)}")
+
+
+def print_average_score(dictionary: dict) -> None:
+    players: dict = dictionary["players"]
+    scores: list[int] = [
+        players[unique_player]["total_score"]
+        for unique_player in players
+    ]
+    average: float = sum(scores) / len(scores)
+    print(f"Average score: {average:.2f}")
+
+
+def print_top_performer(dictionary: dict) -> None:
+    players: dict = dictionary["players"]
+    scores: list[int] = [
+        players[unique_player]["total_score"]
+        for unique_player in players
+    ]
+    max_score: int = max(scores)
+    max_scorer: dict
+    for unique_player in players:
+        if unique_player == max_score:
+            max_scorer = unique_player
+    print(f"Top performer: {max_scorer} ({max_scorer["total_score"]})")
 
 
 if __name__ == "__main__":
