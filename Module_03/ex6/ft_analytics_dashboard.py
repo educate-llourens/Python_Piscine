@@ -302,7 +302,7 @@ def print_high_scores(dictionary: dict) -> None:
     high_scorers: list[str] = [
         player_name
         for player_name in players
-        if players[player_name]["total_score"] > 2000
+        if dictionary["players"][player_name]["total_score"] > 2000
     ]
     print(f"High scorers (>2000): {sorted(high_scorers)}")
 
