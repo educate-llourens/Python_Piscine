@@ -32,7 +32,7 @@ class NumericProcessor(DataProcessor):
         len_list: int = len(data)
         total_nbrs: int = sum(data)
         average_nbrs: float = total_nbrs / len_list
-        return (f"Processed {len_list} numeric values,"
+        return (f"Processed {len_list} numeric values, "
                 f"sum={total_nbrs}, avg={average_nbrs:.2f}")
 
 
@@ -71,7 +71,7 @@ def main() -> None:
         print(" Numeric data verified")
     else:
         print("Numeric data NOT verified")
-    print(nbrs.format_output())
+    print(nbrs.format_output(nbrs.process([1, 2, 3, 4, 5])))
 
 
 if __name__ == "__main__":
