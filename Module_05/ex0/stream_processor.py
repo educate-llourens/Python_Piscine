@@ -38,14 +38,22 @@ class NumericProcessor(DataProcessor):
 
 class TextProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
-        if type(data) is not list:
-            print("TextProcessor: data is not a list")
+        split_str: list[str] = data.split(" ")
+        if type(data) is not str:
+            print("TextProcessor: data is not a str")
             return False
-        for string in data:
-            if type(string) is not str:
-                print(f"TextProcessor: {string} is not a string")
+        for item in split_str:
+            if type(item) is not str:
+                print("TextProcessor: data({item}) is not a string")
                 return False
         return True
+
+    def process(self, data: Any) -> str:
+        len_characters: int = len(data)
+        split_str: list[str] = data.split(" ")
+        len_words: int = len(split_str)
+        return (f"Processed text: {len_characters} characters, "
+                f"{len_words} words")
 
 
 class LogProcessor(DataProcessor):
@@ -53,25 +61,78 @@ class LogProcessor(DataProcessor):
         if type(data) is not str:
             print("LogProcessor: data is not a str")
             return False
-        if '[ALERT]' in data:
+        if "INFO" in data:
             return True
-        if '[INFO]' in data:
+        if "ERROR" in data:
             return True
         return False
 
+    def process(self, data: Any) -> str:
+        split_list: list[str] = data.split(":", 1)
+        alert_type: str = split_list[0]
+        alert_msg: str = split_list[1]
+        return f"[ALERT] {alert_type} level detected:{alert_msg}"
+
 
 def main() -> None:
+    nbrs: NumericProcessor = NumericProcessor()
+    numeric_output_str: str = nbrs.process([1, 2, 3, 4, 5])
+    text: TextProcessor = TextProcessor()
+    text_output_str: str = text.process("Hello Nexus World")
+    log: LogProcessor = LogProcessor()
+    log_output_str: str = log.process("ERROR: Connection timeout")
+    processors: list[DataProcessor] = [
+        NumericProcessor(),
+        TextProcessor(),
+        LogProcessor()
+    ]
+    input: Any = [
+        [1, 2, 3, 4, 5],
+        "Hello Nexus World",
+        "ERROR: Connection timeout"
+    ]
+    i: int = 1
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
     print("")
     print("Initializing Numeric Processor...")
     print("Processing data: [1, 2, 3, 4, 5]")
     print("Validation: ", end="")
-    nbrs: NumericProcessor = NumericProcessor()
     if nbrs.validate([1, 2, 3, 4, 5]):
         print(" Numeric data verified")
+        print(nbrs.format_output(numeric_output_str))
     else:
         print("Numeric data NOT verified")
-    print(nbrs.format_output(nbrs.process([1, 2, 3, 4, 5])))
+    print("")
+    print("Initializing Text Processor...")
+    print("Processing data: 'Hello Nexus World'")
+    print("Validation: ", end="")
+    if text.validate("Hello Nexus World"):
+        print(" Text data verified")
+        print(text.format_output(text_output_str))
+    else:
+        print("Text data NOT verified")
+    print("")
+    print("Initializing Log Processor...")
+    print("Processing data: 'ERROR: Connection timeout'")
+    print("Validation: ", end="")
+    if log.validate("ERROR: Connection timeout"):
+        print("Log entry verified")
+        print(log.format_output(log_output_str))
+    else:
+        print("Log data NOT verified")
+    print("")
+    print("=== Polymorphic Processing Demo ===")
+    print("Processing multiple data types through same interface...")
+    while i <= 3:
+        processor = processors[i - 1]
+        data = input[i - 1]
+        print(f"Result {i}: ", end="")
+        if processor.validate(data):
+            print(processor.process(data))
+        else:
+            print("invalid data")
+        i += 1
+    print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
 if __name__ == "__main__":
