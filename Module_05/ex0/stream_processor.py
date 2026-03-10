@@ -35,6 +35,9 @@ class NumericProcessor(DataProcessor):
         return (f"Processed {len_list} numeric values, "
                 f"sum={total_nbrs}, avg={average_nbrs:.2f}")
 
+    def format_output(self, result: str) -> str:
+        return super().format_output(result)
+
 
 class TextProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
@@ -55,6 +58,9 @@ class TextProcessor(DataProcessor):
         return (f"Processed text: {len_characters} characters, "
                 f"{len_words} words")
 
+    def format_output(self, result: str) -> str:
+        return super().format_output(result)
+
 
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
@@ -72,6 +78,9 @@ class LogProcessor(DataProcessor):
         alert_type: str = split_list[0]
         alert_msg: str = split_list[1]
         return f"[ALERT] {alert_type} level detected:{alert_msg}"
+
+    def format_output(self, result: str) -> str:
+        return super().format_output(result)
 
 
 def main() -> None:
@@ -127,10 +136,13 @@ def main() -> None:
         processor = processors[i - 1]
         data = input[i - 1]
         print(f"Result {i}: ", end="")
-        if processor.validate(data):
-            print(processor.process(data))
-        else:
-            print("invalid data")
+        try:
+            if processor.validate(data):
+                print(processor.process(data))
+            else:
+                print("invalid data")
+        except Exception as msg:
+            print(f"Polymorphic processing error: {msg}")
         i += 1
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
