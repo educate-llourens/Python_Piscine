@@ -26,7 +26,10 @@ class SensorStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        return ""
+        if not data_batch:
+            print(f"Error: Stream ID {self.stream_id} has no readings")
+            return ""
+        return "Sensor analyses: "
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
