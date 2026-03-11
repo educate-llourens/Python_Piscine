@@ -14,10 +14,11 @@ class DataStream(ABC):
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
-        pass
+        return data_batch
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        pass
+        dictionary: dict = {}
+        return dictionary
 
 
 class SensorStream(DataStream):
@@ -25,7 +26,22 @@ class SensorStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        pass
+        return ""
+
+    def filter_data(self, data_batch: List[Any],
+                    criteria: Optional[str] = None) -> List[Any]:
+        if not criteria:
+            return data_batch
+        else:
+            data_batch = [item for item in data_batch if item != criteria]
+        return data_batch
+
+    def get_stats(self) -> Dict[str, Union[str, int, float]]:
+        dictionary: dict = {
+            "stream_id": None,
+            "type": "Environmental Data"
+        }
+        return dictionary
 
 
 class TransactionStream(DataStream):
@@ -33,7 +49,15 @@ class TransactionStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        pass
+        return ""
+
+    def filter_data(self, data_batch: List[Any],
+                    criteria: Optional[str] = None) -> List[Any]:
+        if not criteria:
+            return data_batch
+        else:
+            data_batch = [item for item in data_batch if item != criteria]
+        return data_batch
 
 
 class EventStream(DataStream):
@@ -41,12 +65,22 @@ class EventStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        pass
+        return ""
+
+    def filter_data(self, data_batch: List[Any],
+                    criteria: Optional[str] = None) -> List[Any]:
+        if not criteria:
+            return data_batch
+        else:
+            data_batch = [item for item in data_batch if item != criteria]
+        return data_batch
 
 
 def main() -> None:
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print("")
+    print("Initializing Sensor Stream...")
+    print("Processing sensor batch: [temp:22.5, humidity:65, pressure:1013]")
 
 
 if __name__ == "__main__":
