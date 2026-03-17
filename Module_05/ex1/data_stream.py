@@ -133,7 +133,7 @@ class TransactionStream(DataStream):
                     raise ValueError("Error: ValueError. Transaction stream "
                                      f"ID: {self.stream_id} cannot convert "
                                      f"{value} to an int")
-        return data_batch
+        return transactions_list
 
 
 class EventStream(DataStream):
@@ -148,23 +148,28 @@ class EventStream(DataStream):
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
-        if not criteria:
-            return data_batch
-        else:
-            data_batch = [item for item in data_batch if item != criteria]
+        new_events_batch: List[str] = []
+        events_list: List[str] = []
         return data_batch
 
 
 def main() -> None:
+    # Sensor
     sensor: SensorStream = SensorStream("SENSOR_001")
     sensor_batch: List[Any] = ["temp:22.5", "humidity:65", "pressure:1013"]
     sensor_filtered_data: List[float] = []
+    # Transaction
     transaction: TransactionStream = TransactionStream("TRANS_001")
     transactions_batch: List[Any] = ["buy:100", "sell:150", "buy:75"]
     transaction_filtered_data: list[int] = []
+    # Event
+    event: EventStream = EventStream("EVENT_001")
+    event_batch: List[Any] = ["login", "error", "logout"]
+    event_filtered_list: List[str] = []
 
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print("")
+    # Sensor
     print("Initializing Sensor Stream...")
     print(f"Stream ID: {sensor.stream_id}, Type: Environmental Data")
     print("Processing sensor batch: [temp:22.5, humidity:65, pressure:1013]")
@@ -175,6 +180,7 @@ def main() -> None:
         print(msg)
         return
     print("")
+    # Transaction
     print("Initializing Transaction Stream...")
     print(f"Stream ID: {transaction.stream_id}, Type: Financial Data")
     print("Processing transaction batch: [buy:100, sell:150, buy:75]")
@@ -185,6 +191,11 @@ def main() -> None:
     except (RuntimeError, ValueError) as msg:
         print(msg)
         return
+    print("")
+    # Event
+    print("Initializing Event Stream...")
+    print(f"Stream ID: {transaction.stream_id}, Type: System Events")
+    print("Processing event batch: [login, error, logout]")
 
 
 if __name__ == "__main__":
