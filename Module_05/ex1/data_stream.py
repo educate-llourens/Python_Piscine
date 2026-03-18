@@ -141,16 +141,36 @@ class EventStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        nbr_errors: int = 0
+        len_events: int = 0
+
         if not data_batch:
             raise RuntimeError(f"Error: Event stream ID {self.stream_id} has "
                                "no events")
-        return ""
+        len_events = len(data_batch)
+        for item in data_batch:
+            if item == "error":
+                nbr_errors += 1
+        return f"{len_events} events, {nbr_errors} errors detected"
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
+        criteria_data: List[str] = []
         new_events_batch: List[str] = []
-        events_list: List[str] = []
-        return data_batch
+        return_batch: List[str] = []
+
+        if criteria:
+            criteria_data = [item for item in data_batch if item != criteria]
+            new_events_batch = criteria_data
+        else:
+            new_events_batch = data_batch
+        for item in new_events_batch:
+            if not isinstance(item, str):
+                raise RuntimeError(f"Error: {self.stream_id}, {item} is not "
+                                   "an event")
+                continue
+            return_batch.append(item)
+        return return_batch
 
 
 def main() -> None:
@@ -194,8 +214,18 @@ def main() -> None:
     print("")
     # Event
     print("Initializing Event Stream...")
-    print(f"Stream ID: {transaction.stream_id}, Type: System Events")
+    print(f"Stream ID: {event.stream_id}, Type: System Events")
     print("Processing event batch: [login, error, logout]")
+    try:
+        event_filtered_list = event.filter_data(event_batch)
+        print(f"Event analysis: {event.process_batch(event_filtered_list)}")
+    except RuntimeError as msg:
+        print(msg)
+        return
+    print("")
+    print("=== Polymorphic Stream Processing ===")
+    print("Processing mixed stream types through unified interface...\n")
+    print("Batch 1 results:")
 
 
 if __name__ == "__main__":
