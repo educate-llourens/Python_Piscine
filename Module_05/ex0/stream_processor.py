@@ -19,11 +19,11 @@ class DataProcessor(ABC):
 
 class NumericProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
-        if type(data) is not list:
+        if not isinstance(data, list):
             print("NumericProcessor: data is not a list")
             return False
         for nbr in data:
-            if type(nbr) is not int:
+            if not isinstance(nbr, int):
                 print(f"NumericProcessor: {nbr} is not an int")
                 return False
         return True
@@ -42,11 +42,11 @@ class NumericProcessor(DataProcessor):
 class TextProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         split_str: list[str] = data.split(" ")
-        if type(data) is not str:
+        if not isinstance(data, str):
             print("TextProcessor: data is not a str")
             return False
         for item in split_str:
-            if type(item) is not str:
+            if not isinstance(item, str):
                 print("TextProcessor: data({item}) is not a string")
                 return False
         return True
@@ -64,7 +64,7 @@ class TextProcessor(DataProcessor):
 
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
-        if type(data) is not str:
+        if not isinstance(data, str):
             print("LogProcessor: data is not a str")
             return False
         if "INFO" in data:
@@ -96,7 +96,7 @@ def main() -> None:
         LogProcessor()
     ]
     input: Any = [
-        [1, 2, 3, 4, 5],
+        [1, 2, 3],
         "Hello Nexus World",
         "ERROR: Connection timeout"
     ]
@@ -113,7 +113,7 @@ def main() -> None:
         print("Numeric data NOT verified")
     print("")
     print("Initializing Text Processor...")
-    print("Processing data: 'Hello Nexus World'")
+    print('Processing data: "Hello Nexus World"')
     print("Validation: ", end="")
     if text.validate("Hello Nexus World"):
         print(" Text data verified")

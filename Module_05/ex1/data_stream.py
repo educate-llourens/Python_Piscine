@@ -26,6 +26,7 @@ class SensorStream(DataStream):
         super().__init__(stream_id)
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        temp_readings: List[float] = []
         nbr_processed_items: int = 0
         avg_temp: float = 0
 
@@ -33,8 +34,20 @@ class SensorStream(DataStream):
             raise RuntimeError(f"Error: Sensor stream ID {self.stream_id} has "
                                "no readings")
         nbr_processed_items = len(data_batch)
+        for item in data_batch:
+            key, value = item.split(":", 1)
+            if key == "temp":
+                try:
+                    temp_readings.append(float(value))
+                except ValueError:
+                    raise ValueError(f"Error: ValueError. Sensor stream ID: "
+                                     f"{self.stream_id} cannot convert"
+                                     f"{value} to a float")
+            if not temp_readings:
+                raise RuntimeError(f"Error: Sensor stream ID {self.stream_id} "
+                                   "has no temperature readings")
         try:
-            avg_temp = sum(data_batch) / nbr_processed_items
+            avg_temp = sum(temp_readings) / len(temp_readings)
         except ZeroDivisionError:
             raise ZeroDivisionError(f"Error: ZeroDivision. Sensor stream ID "
                   f"{self.stream_id} could not calculate avg temp")
@@ -46,7 +59,7 @@ class SensorStream(DataStream):
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
-        temp_readings: List[float] = []
+        return_batch: List[str] = []
         criteria_data: List[float] = []
         new_data_batch: List[Any] = []
 
@@ -59,20 +72,12 @@ class SensorStream(DataStream):
         for item in new_data_batch:
             if not isinstance(item, str):
                 continue
-            key, value = item.split(":", 1)
-            if key == "temp":
-                try:
-                    temp_readings.append(float(value))
-                except ValueError:
-                    raise ValueError(f"Error: ValueError. Sensor stream ID: "
-                                     f"{self.stream_id} cannot convert"
-                                     f"{value} to a float")
             else:
-                continue
-            if not temp_readings:
+                return_batch.append(item)
+            if not return_batch:
                 raise RuntimeError(f"Error: Sensor stream ID {self.stream_id} "
-                                   "has no temperature readings")
-        return temp_readings
+                                   "has no readings after filtering")
+        return return_batch
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         dictionary: dict = {
@@ -95,10 +100,10 @@ class TransactionStream(DataStream):
                                " has no transactions")
         net_flow = sum(data_batch)
         if net_flow > 0:
-            return_str = (f"{operations_len} operations, net flow "
+            return_str = (f"{operations_len} operations, net flow: "
                           f"+{net_flow} units")
         elif net_flow <= 0:
-            return_str = (f"{operations_len} operations, net flow "
+            return_str = (f"{operations_len} operations, net flow: "
                           f"{net_flow} units")
         return return_str
 
@@ -173,6 +178,23 @@ class EventStream(DataStream):
         return return_batch
 
 
+class StreamProcessor:
+    def __init__(self, streams: List[DataStream]) -> None:
+        self.streams = streams
+
+    def process_batches(self, batches: List[List[Any]]) -> List[str]:
+        return_list: List[str] = []
+
+        for i in range(len(self.streams)):
+            try:
+                stream = self.streams[i]
+                result = stream.process_batch(batches)
+                return_list.append(result)
+            except (RuntimeError, TypeError, ValueError):
+                raise
+        return return_list
+
+
 def main() -> None:
     # Sensor
     sensor: SensorStream = SensorStream("SENSOR_001")
@@ -186,6 +208,17 @@ def main() -> None:
     event: EventStream = EventStream("EVENT_001")
     event_batch: List[Any] = ["login", "error", "logout"]
     event_filtered_list: List[str] = []
+    # Polymorphism data section
+    poly_sensor_batch: List[Any] = ["temp:22.5", "humidity:65"]
+    poly_transaction_batch: List[Any] = ["buy:100", "sell:150", "buy:75",
+                                         "buy:1000"]
+    poly_event_batch: List[Any] = ["login", "error", "logout"]
+    process_batches: List[List[Any]] = [poly_sensor_batch,
+                                        poly_transaction_batch,
+                                        poly_event_batch]
+    stream_list: List[DataStream] = [sensor, transaction, event]
+    processor: StreamProcessor = StreamProcessor(stream_list)
+    result_strings: List[str] = []
 
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print("")
@@ -226,6 +259,20 @@ def main() -> None:
     print("=== Polymorphic Stream Processing ===")
     print("Processing mixed stream types through unified interface...\n")
     print("Batch 1 results:")
+    i = 0
+    while i < len(stream_list):
+         
+        base_str = result_str[i]
+        trimmed_front = base_str.split(":", 1)[1].strip()
+        trimmed_back = trimmed_front.split(",", 1)[0].strip()
+        stream = stream_list[i]
+        if isinstance(stream, SensorStream):
+            print(f"- Sensor data: {trimmed_back}")
+        elif isinstance(stream, TransactionStream):
+            print(f"Transaction data: {trimmed_back}")
+        elif isinstance(stream, EventStream):
+            print(f"- Event data: {trimmed_back}")
+        i += 1
 
 
 if __name__ == "__main__":
