@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
-from typing import Protocol, Any, List, Union
+from typing import Protocol, Any, List, Union, Dict
 
 
 class ProcessingStage(Protocol):
@@ -12,8 +12,9 @@ class ProcessingStage(Protocol):
     Args:
         Protocol (_type_): _description_
     """
-    def process() -> None:
+    def process(self, data: Any) -> Any:...
         pass
+
 
 # ABC -------------------------------------------------------------------------
 class ProcessingPipeline(ABC):
@@ -24,13 +25,17 @@ class ProcessingPipeline(ABC):
     def __init__(self):
         self.stages = []
 
-    def add_stage() -> None:
+    def add_stage(self, stage: ProcessingStage) -> None:
+        self.stages.append(stage)
+
+    @abstractmethod
+    def process(self, data: Any) -> Union[str, Any]:
         pass
 
 
 # STAGE CLASSES ---------------------------------------------------------------
 class InputStage:
-    def process(self, data: Any) -> Union[str, Any]:
+    def process(self, data: Any) -> Dict:
         pass
 
 
@@ -47,19 +52,23 @@ class OutputStage:
 # ADAPTER CLASSES -------------------------------------------------------------
 class JSONAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
+        super().__init__()
         self.pipeline_id = pipeline_id
 
 
 class CSVAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
+        super().__init__()
         self.pipeline_id = pipeline_id
 
 
 class StreamAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
+        super().__init__()
         self.pipeline_id = pipeline_id
 
 
+# PRINT EXAMPLE ---------------------------------------------------------------
 def main() -> None:
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===")
     print("")
