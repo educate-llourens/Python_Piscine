@@ -69,6 +69,10 @@ class SensorStream(DataStream):
             new_data_batch = criteria_data
         else:
             new_data_batch = data_batch
+            for item in data_batch:
+                key, value = item.split(":", 1)
+                if key == "temp" and float(value) > 100:
+                    print("[ALERT] Temp too high")
         for item in new_data_batch:
             if not isinstance(item, str):
                 continue
@@ -125,6 +129,8 @@ class TransactionStream(DataStream):
             key, value = item.split(":", 1)
             if key == "buy":
                 try:
+                    if int(value) > 1000:
+                        print("[ALERT] High transaction")
                     transactions_list.append(int(value))
                 except ValueError:
                     raise ValueError(f"Error: ValueError. Transaction stream "
@@ -132,6 +138,8 @@ class TransactionStream(DataStream):
                                      f"{value} to an int")
             elif key == "sell":
                 try:
+                    if int(value) < -1000:
+                        print("[ALERT] High transaction")
                     negative = int(value)
                     transactions_list.append(negative * -1)
                 except ValueError:
@@ -175,6 +183,9 @@ class EventStream(DataStream):
                                    "an event")
                 continue
             return_batch.append(item)
+        for item in return_batch:
+            if "error" in item:
+                print("[ALERT] Error detected")
         return return_batch
 
 
@@ -280,12 +291,9 @@ def main() -> None:
     print("")
     print("Stream filtering active: High-priority data only")
     print("Filtered results: 2 critical sensor alerts, 1 large transaction")
-    # To make this actually work, I would change my filter data to return
-    # a list of sensor data over a random high number, any logs that are
-    # an error or any transactions over a high random value if the
-    # criteria receives a string "high-priority" This exercise has
-    # become far too long and stupid for me to spend extra time
-    # implementing this.
+    # To make this actually work, I would need to store the stats in the
+    # get_stats dictionary and update the dictionary. The current return
+    # value does not make sense and does not seem to get evaluated at all.
     print("")
     print("All streams processed successfully. Nexus throughput optimal.")
 
