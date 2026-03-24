@@ -83,12 +83,6 @@ class SensorStream(DataStream):
                                    "has no readings after filtering")
         return return_batch
 
-    def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        dictionary: dict = {
-            "stream_id": self.stream_id
-        }
-        return dictionary
-
 
 class TransactionStream(DataStream):
     def __init__(self, stream_id: str) -> None:
