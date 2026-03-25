@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 from typing import Protocol, Any, List, Union, Dict
 
 
-
-
 class NexusManager:
     def __init__(self) -> None:
         pipelines: List[ProcessingPipeline]
+    
+    def add_pipeline() -> None:
 
 
 class ProcessingStage(Protocol):
@@ -60,19 +60,19 @@ class OutputStage:
 
 
 # ADAPTER CLASSES -------------------------------------------------------------
-class JSONAdapter(ProcessingPipeline):
+class JSONAdapterPipeLine(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
         super().__init__()
         self.pipeline_id = pipeline_id
 
 
-class CSVAdapter(ProcessingPipeline):
+class CSVAdapterPipeLine(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
         super().__init__()
         self.pipeline_id = pipeline_id
 
 
-class StreamAdapter(ProcessingPipeline):
+class StreamAdapterPipeLine(ProcessingPipeline):
     def __init__(self, pipeline_id: str):
         super().__init__()
         self.pipeline_id = pipeline_id
@@ -84,6 +84,7 @@ def main() -> None:
     print("")
     print("Initializing Nexus Manager...")
     # Create Nexus manager and call methods on Nexus manager
+    nexus_overlord = NexusManager()
     print("Pipeline capacity: 1000 streams/second")
     print("")
     print("Creating Data Processing Pipeline...")
