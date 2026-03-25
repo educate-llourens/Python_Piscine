@@ -4,6 +4,13 @@ from abc import ABC, abstractmethod
 from typing import Protocol, Any, List, Union, Dict
 
 
+
+
+class NexusManager:
+    def __init__(self) -> None:
+        pipelines: List[ProcessingPipeline]
+
+
 class ProcessingStage(Protocol):
     """
     Interface for stages using duck typing. Any class with process() can act
@@ -36,17 +43,20 @@ class ProcessingPipeline(ABC):
 # STAGE CLASSES ---------------------------------------------------------------
 class InputStage:
     def process(self, data: Any) -> Dict:
-        pass
+        return_dict: dict = {}
+        return return_dict
 
 
 class TransformStage:
-    def process(self, data: Any) -> Union[str, Any]:
-        pass
+    def process(self, data: Any) -> Dict:
+        return_dict: dict = {}
+        return return_dict
 
 
 class OutputStage:
-    def process(self, data: Any) -> Union[str, Any]:
-        pass
+    def process(self, data: Any) -> str:
+        return_str: str = ""
+        return return_str
 
 
 # ADAPTER CLASSES -------------------------------------------------------------
@@ -73,12 +83,17 @@ def main() -> None:
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===")
     print("")
     print("Initializing Nexus Manager...")
+    # Create Nexus manager and call methods on Nexus manager
     print("Pipeline capacity: 1000 streams/second")
     print("")
     print("Creating Data Processing Pipeline...")
     print("Stage 1: Input validation and parsing")
+    # set up input -> on Nexus manager have set_up_input method
+    # create input stage and add to list of pipelines
     print("Stage 2: Data transformation and enrichment")
+    # Same but for Transform stage
     print("Stage 3: Output formatting and delivery")
+    # Same but for Output stage
     print("")
     print("=== Multi-Format Data Processing ===")
     print("")
