@@ -37,12 +37,15 @@ class Flameling(Creature):
         """
         return f"{self.name} uses Ember!"
 
+    def describe(self) -> str:
+        return f"{self.name} is a {self.creature_type} type Creature"
+
 
 class Pyrodon(Creature):
     """Evolution of Flameling
     """
     def __init__(self) -> None:
-        self.name = Pyrodon
+        self.name = "Pyrodon"
         self.creature_type = "Fire/Flying"
 
     def attack(self) -> str:
@@ -52,12 +55,15 @@ class Pyrodon(Creature):
         """
         return f"{self.name} uses Flamethrower!"
 
+    def describe(self) -> str:
+        return f"{self.name} is a {self.creature_type} type Creature"
+
 
 class Aquabub(Creature):
     """Base water creature
     """
     def __init__(self) -> None:
-        self.name = Aquabub
+        self.name = "Aquabub"
         self.creature_type = "Water"
 
     def attack(self) -> str:
@@ -65,14 +71,17 @@ class Aquabub(Creature):
         Returns:
             str: Aquabub specific attack string
         """
-        return f"{self.name} uses watergun!"
+        return f"{self.name} uses Water Gun!"
+
+    def describe(self) -> str:
+        return f"{self.name} is a {self.creature_type} type Creature"
 
 
 class Torragon(Creature):
     """Evolution of Aquabub
     """
     def __init__(self) -> None:
-        self.name = Torragon
+        self.name = "Torragon"
         self.creature_type = "Water"
 
     def attack(self) -> str:
@@ -81,3 +90,6 @@ class Torragon(Creature):
             str: Torragon specific attack string
         """
         return f"{self.name} uses Hydro Pump!"
+
+    def describe(self) -> str:
+        return f"{self.name} is a {self.creature_type} type Creature"
