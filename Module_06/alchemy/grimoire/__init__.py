@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
 
-from .spellbook import record_spell
-from .validator import validate_ingredients
+from alchemy.grimoire.light_spellbook import light_spell_record
+from alchemy.grimoire.dark_spellbook import dark_spell_record
+# from alchemy.grimoire.dark_validator import validate_ingredients

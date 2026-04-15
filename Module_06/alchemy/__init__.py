@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from .elements import create_fire, create_water
+from alchemy.elements import create_air
+from alchemy.potions import healing_potion, strength_potion
+from .transmutation import lead_to_gold
 
-__version__ = "1.0.0"
-__author__ = "Master Pythonicus"
+heal = healing_potion
