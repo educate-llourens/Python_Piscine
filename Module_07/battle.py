@@ -5,8 +5,8 @@ from ex0.creature_factory_classes import FlameFactory, AquaFactory
 
 def battle() -> None:
     # Variables ***************************************************************
-    flame_creature_factory = FlameFactory()
-    aqua_creature_factory = AquaFactory()
+    flame_creature_factory: FlameFactory = FlameFactory()
+    aqua_creature_factory: AquaFactory = AquaFactory()
     flame_first_evolution = flame_creature_factory.create_base()
     flame_evolved = flame_creature_factory.create_evolved()
     aqua_first_evolution = aqua_creature_factory.create_base()
