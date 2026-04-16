@@ -1,7 +1,23 @@
 #!/usr/bin/env python3
 
+from abc import ABC, abstractmethod
 from ex0.creature_classes import Creature
-from .capability_classes import HealCapability, TransformCapability
+
+
+class HealCapability(ABC):
+    @abstractmethod
+    def heal(self) -> str:
+        return ""
+
+
+class TransformCapability(ABC):
+    @abstractmethod
+    def transform(self) -> str:
+        return ""
+
+    @abstractmethod
+    def revert(self) -> str:
+        return ""
 
 
 class Sproutling(Creature, HealCapability):

@@ -3,6 +3,7 @@
 from .ex1.capability_factory_classes import (HealingCreatureFactory,
                                              TransformCreatureFactory)
 
+
 def capacitor() -> None:
     # Variables ***************************************************************
     healing_factory: HealingCreatureFactory = HealingCreatureFactory()
@@ -17,7 +18,7 @@ def capacitor() -> None:
     print(" base:")
     print(f"{first_heal_evolution.describe()}")
     print(f"{first_heal_evolution.attack()}")
-    print(f"{first_heal_evolution.}")
+    print(f"{first_heal_evolution.h}")
 
 
 if __name__ == "__main__":
