@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
 from ex0.creature_factory_classes import FlameFactory, AquaFactory
+from ex0.creature_classes import (Creature)
 
 
 def battle() -> None:
     # Variables ***************************************************************
     flame_creature_factory: FlameFactory = FlameFactory()
     aqua_creature_factory: AquaFactory = AquaFactory()
-    flame_first_evolution = flame_creature_factory.create_base()
-    flame_evolved = flame_creature_factory.create_evolved()
-    aqua_first_evolution = aqua_creature_factory.create_base()
-    aqua_evolved = aqua_creature_factory.create_evolved()
+    flame_first_evolution: Creature = flame_creature_factory.create_base()
+    flame_evolved: Creature = flame_creature_factory.create_evolved()
+    aqua_first_evolution: Creature = aqua_creature_factory.create_base()
+    aqua_evolved: Creature = aqua_creature_factory.create_evolved()
 
     # Testing FlameFactory ****************************************************
     print("Testing factory")

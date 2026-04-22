@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
+from typing import cast
 from ex0.creature_classes import Creature
-from ex1.capability_factory_classes import (HealingCreatureFactory,
-                                            TransformCreatureFactory)
-from ex1.creature_classes import (Sproutling, Bloomelle, Shiftling, Morphagon)
+from ex1.capability_classes import HealCapability, TransformCapability
 
 
-class BattleStrategy:
+class BattleStrategy(ABC):
     @abstractmethod
     def act(self, creature: Creature) -> str:
         """Will be called by the tournament script
@@ -44,16 +43,37 @@ class AggressiveStrategy(BattleStrategy):
         BattleStrategy (_type_): _description_
     """
     def is_valid(self, creature: Creature) -> bool:
-        if type(creature) is Shiftling or type(creature) is Morphagon:
+        if isinstance(creature, TransformCapability):
             return True
         return False
 
     def act(self, creature: Creature) -> str:
-        c
+        if self.is_valid(creature):
+            transform_creature = cast(TransformCapability, creature)
+            return (f"{transform_creature.transform()}\n"
+                    f"{creature.attack()}\n"
+                    f"{transform_creature.revert()}")
+        raise ValueError("Battle error, aborting tournament: "
+                         f"Invalid Creature '{creature.name}' for this "
+                         "agrssive strategy")
+        return ""
 
 
 class DefensiveStrategy(BattleStrategy):
     """Suitable for Creature with healing capabilities, that
 will attack and then heal during the tournament.
     """
-    pass
+    def is_valid(self, creature: Creature) -> bool:
+        if isinstance(creature, HealCapability):
+            return True
+        return False
+
+    def act(self, creature: Creature) -> str:
+        if self.is_valid(creature):
+            healing_creature: HealCapability = cast(HealCapability, creature)
+            return (f"{creature.attack()}\n"
+                    f"{healing_creature.heal()}")
+        raise ValueError("Battle error, aborting tournament: "
+                         f"Invalid Creature '{creature.name}' for this "
+                         "defensive strategy")
+        return ""
