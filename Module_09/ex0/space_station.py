@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError  # type: ignore[import]
 
 
 class SpaceStation(BaseModel):
@@ -55,8 +54,8 @@ def main() -> None:
                                        last_maintenance="2026-04-28",
                                        is_operational=True)
         print(invalid_station)
-    except Exception as msg:
-        print(msg)
+    except ValidationError as msg:
+        print(msg.errors()[0]['msg'])
         return
 
 
