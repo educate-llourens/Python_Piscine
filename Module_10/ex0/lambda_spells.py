@@ -14,7 +14,8 @@ def artifact_sorter(artifacts: List[dict]) -> List[dict]:
 def power_filter(mages: List[dict], min_power) -> List[dict]:
     filtered_mages: List[dict]
 
-    filtered_mages = list(filter(lambda mage: mage['power'] >= min_power, mages))
+    filtered_mages = list(
+        filter(lambda mage: mage['power'] >= min_power, mages))
     return filtered_mages
 
 
