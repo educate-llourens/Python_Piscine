@@ -46,7 +46,7 @@ def alian_contact() -> None:
     invalid_alien_contact: AlienContact
 
     # Valid Contact Log Validation ********************************************
-    alien_contact = AlienContact(contact_id="AC_2024_001",
+    alien_contact = AlienContact(contact_id="AC2024_001",
                                  timestamp="2026-04-29",
                                  location="Area 51, Nevada",
                                  contact_type="radio",
